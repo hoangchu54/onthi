@@ -29,10 +29,24 @@
   /* ĐỔI DÒNG DƯỚI: dán link Web App (kết thúc bằng /exec) lấy ở bước Triển khai của Apps Script */
   const APP_URL = 'https://script.google.com/macros/s/AKfycbzhKeQOG2Jz5rchfRXAvWUeGaVI6WvJIwK5z7yoYwivqn_NM2h2RkH58EnqN5uV86a-/exec';
 
+  /* Trang vỏ giữ token đăng nhập: iPhone hay xoá bộ nhớ của trang Apps Script nằm trong iframe,
+     còn bộ nhớ của trang vỏ (github.io) thì giữ lại. App gửi token ra đây bằng postMessage. */
+  const KEY = 'om_shell_token';
+  const get = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+  const set = v => { try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) { } };
+
+  window.addEventListener('message', e => {
+    if (!/\.googleusercontent\.com$|^https:\/\/script\.google\.com$/.test(e.origin)) return;
+    const m = e.data || {};
+    if (m.om === 'token' && (m.token === '' || /^[A-Za-z0-9-]{20,80}$/.test(m.token))) set(m.token);
+    if (m.om === 'reload') location.reload();
+  });
+
   if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(APP_URL)) {
     document.body.innerHTML = '<div class="note"><img src="cats/cat-cookie.webp" alt=""><b>Chưa dán link Web App</b><span>Mở file index.html, sửa dòng APP_URL thành link /exec của Apps Script.</span></div>';
   } else {
-    document.getElementById('app').src = APP_URL + '?shell=1';
+    const t = get();
+    document.getElementById('app').src = APP_URL + '?shell=1&o=' + encodeURIComponent(location.origin) + (t ? '&t=' + encodeURIComponent(t) : '');
   }
 </script>
 </body>
