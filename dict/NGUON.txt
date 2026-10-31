@@ -1,0 +1,4 @@
+Từ điển Anh–Việt trong thư mục này được chuyển đổi từ:
+- Free Vietnamese Dictionary Project (Hồ Ngọc Đức), giấy phép GPL, bản lấy từ github.com/hellovietduc/envidict
+- CEFR-J Wordlist Version 1.5, compiled by Yukio Tono, Tokyo University of Foreign Studies (cefr-j.org)
+- Octanove Vocabulary Profile C1/C2 1.0, Octanove Labs, CC BY-SA 4.0
